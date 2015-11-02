@@ -112,6 +112,7 @@ PROCESS_THREAD(node_process, ev, data){
   node_role = role_6ln;
   
   /* Set node with ID == 1 as coordinator, convenient in Cooja. */
+/*
   if(node_id == 1) {
     if(LLSEC802154_CONF_SECURITY_LEVEL) {
       node_role = role_6dr_sec;
@@ -146,7 +147,8 @@ PROCESS_THREAD(node_process, ev, data){
     }
   }
 
-#endif /* CONFIG_VIA_BUTTON */
+
+#endif *//* CONFIG_VIA_BUTTON */
 
   //printf("Init: node starting with role %s\n", node_role == role_6ln ? "6ln" : (node_role == role_6dr) ? "6dr" : "6dr-sec");
 
