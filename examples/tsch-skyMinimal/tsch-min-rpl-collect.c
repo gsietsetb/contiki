@@ -1,12 +1,11 @@
 /*
- *
  */
 /**
  * \file
  *         Example file using RPL for a data collection.
  *         Can be deployed in the Indriya or Twist testbeds.
  *
- * \author Sierra Aiello, Guillermo <gsie.etsetb@gmail.com>
+ * \author Simon Duquennoy <simonduq@sics.se>
  */
 
 #include "contiki-conf.h"
