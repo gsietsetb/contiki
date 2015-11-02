@@ -339,13 +339,14 @@
 
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#define WITH_DEPLOYMENT 1		// TO BE CHANGED!!!! (I GUESS)
+#define WITH_DEPLOYMENT 0		// TO BE CHANGED!!!! (I GUESS)
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define WITH_TSCH_LOG 1			// TO BE CHANGED!!!! (I GUESS)
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#define WITH_LOG 1			// TO BE CHANGED!!!! (I GUESS)
+#define WITH_LOG 0			// TO BE CHANGED!!!! (I GUESS)
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #define WITH_LOG_HOP_COUNT 1
+
 #if WITH_LOG
 #include "deployment-log.h"
 #endif

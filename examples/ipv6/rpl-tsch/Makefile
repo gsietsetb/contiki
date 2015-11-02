@@ -1,14 +1,15 @@
 CONTIKI_PROJECT = node
 all: $(CONTIKI_PROJECT)
 
+TARGET=sky
 CONTIKI=../../..
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
 
 CONTIKI_WITH_IPV6 = 1
-MAKE_WITH_ORCHESTRA ?= 0 # force Orchestra from command line
-MAKE_WITH_SECURITY ?= 0 # force Security from command line
+MAKE_WITH_ORCHESTRA = 0 # force Orchestra from command line
+MAKE_WITH_SECURITY = 0 # force Security from command line
 
-APPS += orchestra
+#APPS += orchestra
 MODULES += core/net/mac/tsch
 
 ifeq ($(MAKE_WITH_ORCHESTRA),1)

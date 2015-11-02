@@ -55,11 +55,11 @@
 #include "net/mac/tsch/tsch-log.h"
 #include <string.h>
 
-#if TSCH_LOG_LEVEL >= 1
-#define DEBUG DEBUG_PRINT
-#else /* TSCH_LOG_LEVEL */
+#ifdef TSCH_CALLBACK_NEW_TIME_SOURCE
+void TSCH_CALLBACK_NEW_TIME_SOURCE(struct tsch_neighbor *old, struct tsch_neighbor *new);
+#endif
+
 #define DEBUG DEBUG_NONE
-#endif /* TSCH_LOG_LEVEL */
 #include "net/ip/uip-debug.h"
 
 /* Check if TSCH_QUEUE_NUM_PER_NEIGHBOR is power of two */

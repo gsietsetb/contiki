@@ -1,35 +1,7 @@
 /*
- * Copyright (c) 2015, SICS Swedish ICT.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the Institute nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
  */
-
 /**
- * \author Simon Duquennoy <simonduq@sics.se>
+ * \author Guillermo Sierra <gsie.etsetb@gmail.com>
  */
 
 #ifndef __PROJECT_CONF_H__
@@ -40,10 +12,7 @@
 #define WITH_ORCHESTRA 0
 #endif /* WITH_ORCHESTRA */
 
-/* Set to enable TSCH security */
-#ifndef WITH_SECURITY
-#define WITH_SECURITY 0
-#endif /* WITH_SECURITY */
+#define WITH_RPL 1
 
 /*******************************************************/
 /********************* Enable TSCH *********************/
@@ -67,13 +36,31 @@
 #define TSCH_CALLBACK_JOINING_NETWORK tsch_rpl_callback_joining_network
 #define TSCH_CALLBACK_LEAVING_NETWORK tsch_rpl_callback_leaving_network
 
+/*
+*!!!!!!!!!!!!!!!!!!!!!!!!
+*!			!
+*!!!PAY ATTENTION HERE!!!
+*!			!
+*!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+
+/* No Downwards routes */
+#undef RPL_CONF_MOP
+#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
+#undef RPL_CONF_DIO_INTERVAL_DOUBLINGS
+//#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 4 /* Max factor: x16. 4.096 s * 16 = 65.536 s */
+#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 6 /* Max factor: x64. 4.096 s * 64 = 262.144 s */
+/* RPL Trickle timer tuning */
+#undef RPL_CONF_DIO_INTERVAL_MIN
+#define RPL_CONF_DIO_INTERVAL_MIN 12 /* 4.096 s */
+
 /* Needed for cc2420 platforms only */
 /* Disable DCO calibration (uses timerB) */
 #undef DCOSYNCH_CONF_ENABLED
 #define DCOSYNCH_CONF_ENABLED            0
 /* Enable SFD timestamps (uses timerB) */
 #undef CC2420_CONF_SFD_TIMESTAMPS
-#define CC2420_CONF_SFD_TIMESTAMPS       1
+#define CC2420_CONF_SFD_TIMESTAMPS       0
 
 /*******************************************************/
 /******************* Configure TSCH ********************/
@@ -82,7 +69,7 @@
 /* TSCH logging. 0: disabled. 1: basic log. 2: with delayed
  * log messages from interrupt */
 #undef TSCH_LOG_CONF_LEVEL
-#define TSCH_LOG_CONF_LEVEL 2
+#define TSCH_LOG_CONF_LEVEL 0
 
 /* IEEE802.15.4 PANID */
 #undef IEEE802154_CONF_PANID
@@ -95,13 +82,13 @@
 /* 6TiSCH minimal schedule length.
  * Larger values result in less frequent active slots: reduces capacity and saves energy. */
 #undef TSCH_SCHEDULE_CONF_DEFAULT_LENGTH
-#define TSCH_SCHEDULE_CONF_DEFAULT_LENGTH 3
+#define TSCH_SCHEDULE_CONF_DEFAULT_LENGTH 0
 
 #if WITH_SECURITY
 
 /* Enable security */
 #undef LLSEC802154_CONF_SECURITY_LEVEL
-#define LLSEC802154_CONF_SECURITY_LEVEL 1
+#define LLSEC802154_CONF_SECURITY_LEVEL 0
 /* TSCH uses explicit keys to identify k1 and k2 */
 #undef LLSEC802154_CONF_USES_EXPLICIT_KEYS
 #define LLSEC802154_CONF_USES_EXPLICIT_KEYS 1
@@ -128,7 +115,7 @@
 /************* Other system configuration **************/
 /*******************************************************/
 
-#if CONTIKI_TARGET_Z1
+#if CONTIKI_TARGET_SKY
 /* Save some space to fit the limited RAM of the z1 */
 #undef UIP_CONF_TCP
 #define UIP_CONF_TCP 0
@@ -157,7 +144,7 @@
 #define TSCH_SCHEDULE_CONF_DEFAULT_LENGTH 2
 /* Reduce log level to make space for security on z1 */
 #undef TSCH_LOG_CONF_LEVEL
-#define TSCH_LOG_CONF_LEVEL 1
+#define TSCH_LOG_CONF_LEVEL 0
 #endif /* WITH_SECURITY */
 
 #endif /* CONTIKI_TARGET_Z1 */
