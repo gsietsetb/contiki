@@ -35,9 +35,7 @@ AUTOSTART_PROCESSES(&node_process);
 #endif /* CONFIG_VIA_BUTTON */
 
 /*---------------------------------------------------------------------------*/
-static void
-print_network_status(void)
-{
+static void print_network_status(void) {
   int i;
   uint8_t state;
   uip_ds6_defrt_t *default_route;
@@ -84,8 +82,7 @@ print_network_status(void)
 }
 /*---------------------------------------------------------------------------*/
 static void
-net_init(uip_ipaddr_t *br_prefix)
-{
+net_init(uip_ipaddr_t *br_prefix){
   uip_ipaddr_t global_ipaddr;
 
   if(br_prefix) { /* We are RPL root. Will be set automatically
@@ -101,8 +98,7 @@ net_init(uip_ipaddr_t *br_prefix)
   //NETSTACK_MAC.on();
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(node_process, ev, data)
-{
+PROCESS_THREAD(node_process, ev, data){
   static struct etimer et;
   PROCESS_BEGIN();
 
@@ -152,8 +148,7 @@ PROCESS_THREAD(node_process, ev, data)
 
 #endif /* CONFIG_VIA_BUTTON */
 
-  printf("Init: node starting with role %s\n",
-      node_role == role_6ln ? "6ln" : (node_role == role_6dr) ? "6dr" : "6dr-sec");
+  //printf("Init: node starting with role %s\n", node_role == role_6ln ? "6ln" : (node_role == role_6dr) ? "6dr" : "6dr-sec");
 
   tsch_set_pan_secured(LLSEC802154_CONF_SECURITY_LEVEL && (node_role == role_6dr_sec));
   is_coordinator = node_role > role_6ln;
