@@ -14,9 +14,12 @@
 #include "net/rpl/rpl.h"
 #include "net/ipv6/uip-ds6-route.h"
 #include "net/mac/tsch/tsch.h"
-#if WITH_ORCHESTRA
-#include "orchestra.h"
-#endif /* WITH_ORCHESTRA */
+#include "net/ipv6/uip-ds6.h"
+#include "net/ip/uip.h"
+#include "net/ipv6/uip-ds6.h"
+#include "simple-udp.h"
+
+#define UDP_PORT 1234
 
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
@@ -34,52 +37,10 @@ AUTOSTART_PROCESSES(&node_process, &sensors_process);
 AUTOSTART_PROCESSES(&node_process);
 #endif /* CONFIG_VIA_BUTTON */
 
+static struct simple_udp_connection broadcast_connection;
+
 /*---------------------------------------------------------------------------*/
-static void print_network_status(void) {
-    int i;
-    uint8_t state;
-    uip_ds6_defrt_t *default_route;
-    uip_ds6_route_t *route;
 
-    //PRINTA("--- Network status ---\n");
-
-    /* Our IPv6 addresses */
-    //PRINTA("- Server IPv6 addresses:\n");
-    for (i = 0; i < UIP_DS6_ADDR_NB; i++) {
-        state = uip_ds6_if.addr_list[i].state;
-        if (uip_ds6_if.addr_list[i].isused &&
-                (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
-            //PRINTA("-- ");
-            uip_debug_ipaddr_print(&uip_ds6_if.addr_list[i].ipaddr);
-            //PRINTA("\n");
-        }
-    }
-
-    /* Our default route */
-    //PRINTA("- Default route:\n");
-    default_route = uip_ds6_defrt_lookup(uip_ds6_defrt_choose());
-    if (default_route != NULL) {
-        //PRINTA("-- ");
-        uip_debug_ipaddr_print(&default_route->ipaddr);;
-        //PRINTA(" (lifetime: %lu seconds)\n", (unsigned long)default_route->lifetime.interval);
-    } else {
-        //PRINTA("-- None\n");
-    }
-
-    /* Our routing entries */
-    //PRINTA("- Routing entries (%u in total):\n", uip_ds6_route_num_routes());
-    route = uip_ds6_route_head();
-    while (route != NULL) {
-        //PRINTA("-- ");
-        uip_debug_ipaddr_print(&route->ipaddr);
-        //PRINTA(" via ");
-        uip_debug_ipaddr_print(uip_ds6_route_nexthop(route));
-        //PRINTA(" (lifetime: %lu seconds)\n", (unsigned long)route->state.lifetime);
-        route = uip_ds6_route_next(route);
-    }
-
-    //PRINTA("----------------------\n");
-}
 
 /*---------------------------------------------------------------------------*/
 static void net_init(uip_ipaddr_t *br_prefix) {
@@ -97,26 +58,42 @@ static void net_init(uip_ipaddr_t *br_prefix) {
     NETSTACK_MAC.on();
 }
 
+static void receiver(struct simple_udp_connection *c,
+        const uip_ipaddr_t *sender_addr,
+        uint16_t sender_port,
+        const uip_ipaddr_t *receiver_addr,
+        uint16_t receiver_port,
+        const uint8_t *data,
+        uint16_t datalen) {
+    printf("Data received on port %d from port %d with length %d\n",
+            receiver_port, sender_port, datalen);
+}
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(node_process, ev, data) {
     static struct etimer et;
     PROCESS_BEGIN();
 
-    uip_ipaddr_t prefix;
-    uip_ip6addr(&prefix, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
-    net_init(&prefix);
+    simple_udp_register(&broadcast_connection, UDP_PORT,
+            NULL, UDP_PORT,
+            receiver);
+    uip_ipaddr_t addr;
+    uip_ip6addr(&addr, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
+    net_init(&addr);
+    simple_udp_register(&broadcast_connection, UDP_PORT,
+            NULL, UDP_PORT,
+            receiver);
 
-
-#if WITH_ORCHESTRA
-    //orchestra_init();
-#endif /* WITH_ORCHESTRA */
-
-    /* Print out routing tables every minute */
-    //etimer_set(&et, CLOCK_SECOND * 60);
+    /* Print out routing tables every 10sec <</>> minute */
+    etimer_set(&et, CLOCK_SECOND * 10);
     while (1) {
-        print_network_status();
+        //print_network_status();
+        printf("Sending broadcast\n");
+        uip_create_linklocal_allnodes_mcast(&addr);
+        simple_udp_sendto(&broadcast_connection, "Test", 4, &addr);
+        //Timer
         PROCESS_YIELD_UNTIL(etimer_expired(&et));
-        //etimer_reset(&et);
+        etimer_reset(&et);
     }
 
     PROCESS_END();
