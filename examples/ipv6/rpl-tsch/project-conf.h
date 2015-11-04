@@ -12,7 +12,7 @@
 #define WITH_ORCHESTRA 0
 #endif /* WITH_ORCHESTRA */
 
-#define WITH_RPL 1
+//#define WITH_RPL 1
 
 /*******************************************************/
 /********************* Enable TSCH *********************/
@@ -71,9 +71,6 @@
 #undef TSCH_LOG_CONF_LEVEL
 #define TSCH_LOG_CONF_LEVEL 0
 
-/* IEEE802.15.4 PANID */
-#undef IEEE802154_CONF_PANID
-#define IEEE802154_CONF_PANID 0xabcd
 
 /* Do not start TSCH at init, wait for NETSTACK_MAC.on() */
 #undef TSCH_CONF_AUTOSTART
