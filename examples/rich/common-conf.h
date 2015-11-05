@@ -38,7 +38,7 @@
 
 #define WITH_TSCH 1
 #define WITH_TSCH_SECURITY 0
-#define TSCH_LOG_CONF_LEVEL 2
+#define TSCH_LOG_CONF_LEVEL 0
 #define WITH_COAP_RESOURCES 0
 
 #define TSCH_CONFIG_DEFAULT                  0
@@ -249,8 +249,47 @@
 #undef CONTIKI_VERSION_STRING
 #define CONTIKI_VERSION_STRING "Contiki RICH-3.x"
 
-#if CONTIKI_TARGET_SKY || CONTIKI_TARGET_Z1
+/*--------------
+*	ONLY FOR	
+*	SKY MOTE
+--------------*/
+/* No Downwards routes */
+#undef RPL_CONF_MOP
+#define RPL_CONF_MOP RPL_MOP_NO_DOWNWARD_ROUTES
+#undef RPL_CONF_DIO_INTERVAL_DOUBLINGS
+//#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 4 /* Max factor: x16. 4.096 s * 16 = 65.536 s */
+#define RPL_CONF_DIO_INTERVAL_DOUBLINGS 6 /* Max factor: x64. 4.096 s * 64 = 262.144 s */
+/* RPL Trickle timer tuning */
+#undef RPL_CONF_DIO_INTERVAL_MIN
+#define RPL_CONF_DIO_INTERVAL_MIN 12 /* 4.096 s */
 
+
+#if CONTIKI_TARGET_SKY
+/* Save some space to fit the limited RAM of the sky*/
+#undef UIP_CONF_TCP
+#define UIP_CONF_TCP 0
+#undef QUEUEBUF_CONF_NUM
+#define QUEUEBUF_CONF_NUM 6
+#undef TSCH_QUEUE_CONF_NUM_PER_NEIGHBOR
+#define TSCH_QUEUE_CONF_NUM_PER_NEIGHBOR 8
+#undef TSCH_QUEUE_CONF_MAX_NEIGHBOR_QUEUES
+#define TSCH_QUEUE_CONF_MAX_NEIGHBOR_QUEUES 6
+#undef UIP_CONF_MAX_ROUTES
+#define UIP_CONF_MAX_ROUTES  8
+#undef NBR_TABLE_CONF_MAX_NEIGHBORS
+#define NBR_TABLE_CONF_MAX_NEIGHBORS 8
+#undef UIP_CONF_ND6_SEND_NA
+#define UIP_CONF_ND6_SEND_NA 0
+#undef SICSLOWPAN_CONF_FRAG
+#define SICSLOWPAN_CONF_FRAG 0
+
+/* Save some space to fit the limited RAM of the sky */
+#undef TSCH_LOG_CONF_LEVEL
+#define TSCH_LOG_CONF_LEVEL 0
+#endif /* CONTIKI_TARGET_SKY*/
+
+
+#if CONTIKI_TARGET_SKY || CONTIKI_TARGET_Z1
 #include "common-conf-sky-z1.h"
 
 #endif /* CONTIKI_TARGET_SKY || CONTIKI_TARGET_Z1 */
