@@ -5,9 +5,10 @@ CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
 TARGET = sky
 
 CONTIKI_WITH_IPV6 = 1
+WITH_TSCH_SECURITY = 0
 
 PROJECTDIRS += .. ../tools
-PROJECT_SOURCEFILES += rich.c #rich-scheduler-interface.c 
+#PROJECT_SOURCEFILES += rich.c #rich-scheduler-interface.c 
 
 #CFLAGS += -DWITH_COAP
 #CFLAGS += -DREST=coap_rest_implementation

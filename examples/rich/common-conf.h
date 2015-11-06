@@ -43,7 +43,7 @@
 
 #define TSCH_CONFIG_DEFAULT                  0
 #define TSCH_CONFIG_6TISCH_MINIMAL           1
-#define TSCH_CONFIG_ORCHESTRA                2
+#define TSCH_CONFIG_ORCHESTRA                0
 
 #define TSCH_CONFIG TSCH_CONFIG_6TISCH_MINIMAL
 

@@ -54,8 +54,7 @@ static struct simple_udp_connection broadcast_connection;
 PROCESS(broadcast_example_process, "UDP broadcast example process");
 AUTOSTART_PROCESSES(&broadcast_example_process);
 /*---------------------------------------------------------------------------*/
-static void
-receiver(struct simple_udp_connection *c,
+static void receiver(struct simple_udp_connection *c,
          const uip_ipaddr_t *sender_addr,
          uint16_t sender_port,
          const uip_ipaddr_t *receiver_addr,
@@ -67,8 +66,7 @@ receiver(struct simple_udp_connection *c,
          receiver_port, sender_port, datalen);
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(broadcast_example_process, ev, data)
-{
+PROCESS_THREAD(broadcast_example_process, ev, data){
   static struct etimer periodic_timer;
   static struct etimer send_timer;
   uip_ipaddr_t addr;

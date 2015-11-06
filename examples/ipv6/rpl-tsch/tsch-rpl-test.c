@@ -12,7 +12,13 @@
 #include "net/rpl/rpl.h"
 //#include "net/ipv6/uip-ds6-route.h"
 #include "net/mac/tsch/tsch.h"
-
+#include "contiki.h"
+#include "net/rime/rime.h"
+#include "dev/leds.h"
+#include "dev/button-sensor.h"
+#include "cc2420.h"
+#include <stdio.h>
+#include <string.h>
 
 #if WITH_ORCHESTRA
 #include "orchestra.h"
@@ -93,11 +99,11 @@ static void net_init(uip_ipaddr_t *br_prefix) {
         memcpy(&global_ipaddr, br_prefix, 16);
         uip_ds6_set_addr_iid(&global_ipaddr, &uip_lladdr);
         uip_ds6_addr_add(&global_ipaddr, 0, ADDR_AUTOCONF);
-        rpl_set_root(RPL_DEFAULT_INSTANCE, &global_ipaddr);
+/////////////////////////////////////⁷((((((((((((((((((((((((((((((((((        
+	rpl_set_root(RPL_DEFAULT_INSTANCE, &global_ipaddr);
         rpl_set_prefix(rpl_get_any_dag(), br_prefix, 64);
         rpl_repair_root(RPL_DEFAULT_INSTANCE);
     }
-
     NETSTACK_MAC.on();
 }
 
@@ -106,6 +112,9 @@ PROCESS_THREAD(node_process, ev, data) {
     static struct etimer et;
     PROCESS_BEGIN();
 
+    //Button management
+    SENSORS_ACTIVATE(button_sensor);
+    
     /* 3 possible roles:
      * - role_6ln: simple node, will join any network, secured or not
      * - role_6dr: DAG root, will advertise (unsecured) beacons
@@ -133,7 +142,7 @@ PROCESS_THREAD(node_process, ev, data) {
     #if CONFIG_VIA_BUTTON
       {
     #define CONFIG_WAIT_TIME 5
-
+ /*
         SENSORS_ACTIVATE(button_sensor);
         etimer_set(&et, CLOCK_SECOND * CONFIG_WAIT_TIME);
 
@@ -179,6 +188,7 @@ PROCESS_THREAD(node_process, ev, data) {
     etimer_set(&et, CLOCK_SECOND * 60);
     while (1) {
         print_network_status();
+        
         PROCESS_YIELD_UNTIL(etimer_expired(&et));
         etimer_reset(&et);
     }

@@ -17,15 +17,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 /*---------------------------------------------------------------------------*/
 PROCESS(node_process, "RICH Node");
 AUTOSTART_PROCESSES(&node_process);
 
 /*---------------------------------------------------------------------------*/
-static void net_init(uip_ipaddr_t *br_prefix) {
+/*static void net_init(uip_ipaddr_t *br_prefix) {
     uip_ipaddr_t global_ipaddr;
-    if (br_prefix) { /* We are RPL root. Will be set automatically as TSCH pan coordinator via the tsch-rpl module*/
+    if (br_prefix) { / We are RPL root. Will be set automatically as TSCH pan coordinator via the tsch-rpl module*
         memcpy(&global_ipaddr, br_prefix, 16);
         uip_ds6_set_addr_iid(&global_ipaddr, &uip_lladdr);
         uip_ds6_addr_add(&global_ipaddr, 0, ADDR_AUTOCONF);
@@ -34,7 +33,7 @@ static void net_init(uip_ipaddr_t *br_prefix) {
         rpl_repair_root(RPL_DEFAULT_INSTANCE);
     }
     NETSTACK_MAC.on();
-}
+}*/
 
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(node_process, ev, data){
@@ -42,7 +41,7 @@ PROCESS_THREAD(node_process, ev, data){
     uip_ipaddr_t prefix;
     uip_ip6addr(&prefix, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
     //rich_init(&prefix);
-    net_init(&prefix);
+    //net_init(&prefix);
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
