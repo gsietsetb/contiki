@@ -25,6 +25,7 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from) {
     new_str[0] = '\0'; // ensures the memory is an empty string
     strcat(new_str, packetbuf_dataptr());
     strcat(new_str, (char *) from->u8);
+    printf("Going to forward (bcst): '%s'\n", new_str);
     packetbuf_copyfrom((char *) new_str, sizeof(new_str));
     broadcast_send(&broadcast);
 }
@@ -35,9 +36,6 @@ PROCESS_THREAD(example_broadcast_process, ev, data) {
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
     PROCESS_BEGIN();
     broadcast_open(&broadcast, 129, &broadcast_call);
-    while (1) {
-        /*Needed?*/printf("waiting...\n");
-    }
     PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

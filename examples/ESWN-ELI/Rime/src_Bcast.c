@@ -34,11 +34,10 @@ PROCESS_THREAD(src_Bcast_process, ev, data) {
     while (1) {
         PROCESS_WAIT_EVENT();
         if (ev == sensors_event && data == &button_sensor) {
-            packetbuf_copyfrom(light_sensor.value(0), 1);
+            packetbuf_copyfrom(light_sensor.value(0), 2);
             broadcast_send(&broadcast);
-            printf("broadcast message sent (LIGHT = %d Lumens)\n", light_sensor.value(0));
+            printf("\nBroadcast message sent (LIGHT = %d Lumens)\n", light_sensor.value(0));
         }
-        printf("Waiting button to be pressed to send a msg...\n");
     }
     PROCESS_END();
 }
