@@ -15,6 +15,7 @@
 /*---------------------------------------------------------------------------*/
 PROCESS(example_broadcast_process, "Broadcast example");
 AUTOSTART_PROCESSES(&example_broadcast_process);
+static struct broadcast_conn broadcast;
 
 /*---------------------------------------------------------------------------*/
 static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from) {
@@ -23,12 +24,11 @@ static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from) {
     char * new_str;
     new_str[0] = '\0'; // ensures the memory is an empty string
     strcat(new_str, packetbuf_dataptr());
-    strcat(new_str, (char *) u8);
-    packetbuf_copyfrom((char *) new_str);
+    strcat(new_str, (char *) from->u8);
+    packetbuf_copyfrom((char *) new_str, sizeof(new_str));
     broadcast_send(&broadcast);
 }
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};
-static struct broadcast_conn broadcast;
 
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_broadcast_process, ev, data) {
