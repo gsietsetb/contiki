@@ -47,7 +47,7 @@
 #define JL_CONTN					7 		// Continuous carrier
 
 // Transmission power settings
-#define JAMLAB_RANDOM_POWER			0		// 0 = fixed, !0 = random
+#define JAMLAB_RANDOM_POWER			1		// 0 = fixed, !0 = random
 #define JAMLAB_LOWEST_POWER 		CC2420_TXPOWER_MIN
 
 // Allowed carrier types

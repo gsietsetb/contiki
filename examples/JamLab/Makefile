@@ -24,6 +24,6 @@ CONTIKI_TARGET_SOURCEFILES += settings_jamlab.c
 CONTIKI_TARGET_SOURCEFILES += settings_cc2420_rssi.c
 
 #Normal Contiki
-CONTIKI = ../contiki_new/contiki
+CONTIKI = ../..
 include $(CONTIKI)/Makefile.include	
 	

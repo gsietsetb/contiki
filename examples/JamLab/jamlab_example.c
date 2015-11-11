@@ -43,8 +43,7 @@
 
 // JamLab's carrier type
 #define JAMLAB_CARRIER_TYPE 				JAMLAB_CARRIER_TYPE_MODULATED
-#define JAMLAB_INTERFERENCE_TYPE 		JL_CONTN //JL_WIFI2
-
+#define JAMLAB_INTERFERENCE_TYPE                        JL_CONTN //JL_WIFI2
 
 /*---------------------------------------------------------------------------*/
 
