@@ -21,12 +21,12 @@ static struct broadcast_conn broadcast;
 static void broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from) {
     printf("broadcast message received from %d.%d: '%s'\n",
             from->u8[0], from->u8[1], (char *) packetbuf_dataptr());
-    char * new_str;
+    /*char * new_str;
     new_str[0] = '\0'; // ensures the memory is an empty string
     strcat(new_str, packetbuf_dataptr());
     strcat(new_str, (char *) from->u8);
     printf("Going to forward (bcst): '%s'\n", new_str);
-    packetbuf_copyfrom((char *) new_str, sizeof(new_str));
+    */packetbuf_copyfrom((char *) packetbuf_dataptr(), packetbuf_datalen());
     broadcast_send(&broadcast);
 }
 static const struct broadcast_callbacks broadcast_call = {broadcast_recv};

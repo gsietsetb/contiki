@@ -29,12 +29,15 @@ PROCESS_THREAD(src_Bcast_process, ev, data) {
     PROCESS_EXITHANDLER(broadcast_close(&broadcast);)
     PROCESS_BEGIN();
     SENSORS_ACTIVATE(button_sensor);
-          SENSORS_ACTIVATE(light_sensor);
+    SENSORS_ACTIVATE(light_sensor);
     broadcast_open(&broadcast, 129, &broadcast_call);
     while (1) {
         PROCESS_WAIT_EVENT();
         if (ev == sensors_event && data == &button_sensor) {
-            packetbuf_copyfrom(light_sensor.value(0), 2);
+            packetbuf_copyfrom("hello", 6);
+            packetbuf_copyfrom("test", 5);
+
+            //packetbuf_copyfrom((char *) light_sensor.value(0), 3);
             broadcast_send(&broadcast);
             printf("\nBroadcast message sent (LIGHT = %d Lumens)\n", light_sensor.value(0));
         }
